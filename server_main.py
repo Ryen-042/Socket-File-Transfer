@@ -3,6 +3,7 @@ import tqdm
 from sys import argv
 from traceback import print_exc
 from global_imports import *
+from time import sleep
 
 os.makedirs(os.path.join(os.path.dirname(os.path.abspath(__file__)), "files"), exist_ok=True)
 os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), "files"))
@@ -29,6 +30,8 @@ server_socket.listen(1) # Number of client connections to serve
 console.print("[normal1]Waiting for a [normal2]client[/] to [normal2]connect[/]...")
 client_socket, address = server_socket.accept()
 console.print(f"[normal1]Connected to [normal2]'{address[0]}[/]:[normal2]{address[1]}[/]'.[/]")
+
+sleep(1)
 
 # Receiving the filename and filesize data.
 filename, filesize = client_socket.recv(BUFFER_SIZE).decode().strip().split("|")
