@@ -76,7 +76,13 @@ filesize = os.path.getsize(zip_file_path)
 
 client_socket.sendall((zip_filename  + ".zip" + "|" + str(filesize)).encode() + f"{'':<{BUFFER_SIZE-len((zip_filename  + '.zip' + '|' + str(filesize)).encode())}}".encode())
 
-console.print(f"[normal1]Filesize: [normal2]{filesize/1024:.2f} MB[/][/]")
+if filesize / 1024 / 1024 >= 1:
+    string_filesize = f"{filesize/1024/1024:.2f} MB"
+elif filesize / 1024 >= 1:
+    string_filesize = f"{filesize/1024:.2f} KB"
+else:
+    string_filesize = f"{filesize} Bytes"
+console.print(f"[normal1]Filesize: [normal2]{string_filesize}[/][/]")
 
 trans_progress = tqdm.tqdm(desc=f"Sending {os.path.split(zip_file_path)[1]}", total=filesize, leave=False, unit="B", unit_scale=True, unit_divisor=1024)
 with open(zip_file_path, "rb") as zf:
@@ -92,6 +98,7 @@ with open(zip_file_path, "rb") as zf:
         # Update the progress bar
         trans_progress.update(len(bytes_read))
 
+console.print("")
 console.print("[normal1]Operation completed. Deleting the created zip file...[/]")
 os.remove(zip_file_path)
 console.print("[normal1]Closing the socket connection...[/]")
