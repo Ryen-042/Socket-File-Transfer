@@ -28,7 +28,7 @@ server_socket.listen(1) # Number of client connections to serve
 
 console.print("[normal1]Waiting for a [normal2]client[/] to [normal2]connect[/]...")
 client_socket, address = server_socket.accept()
-print(f"[normal1]Connected to [normal2]'{address[0]}[/]:[normal2]{address[1]}[/]'.[/]")
+console.print(f"[normal1]Connected to [normal2]'{address[0]}[/]:[normal2]{address[1]}[/]'.[/]")
 
 # Receiving the filename and filesize data.
 filename, filesize = client_socket.recv(BUFFER_SIZE).decode().strip().split("|")
@@ -38,24 +38,29 @@ filesize = int(filesize)
 if os.name == "posix":
     filename = os.path.normpath(filename.replace("\\", "/"))
 
-print(f"[RECV] Receiving data for the [{filename.strip()}] file.")
+console.print(f"[RECV] Receiving data for the [{filename.strip()}] file.")
 filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), "files", filename)
 
 # Receiving the actual file.
 progress = tqdm.tqdm(range(filesize), f"Receiving {os.path.split(filename)[1]}", unit="B", unit_scale=True, unit_divisor=1024)
 bytes_left = filesize
 with open(filename, "wb") as file:
-    while True:
+    while bytes_left:
         bytes_read = client_socket.recv(BUFFER_SIZE)
         
-        if len(bytes_read.strip()) == 0:
+        if bytes_left <= BUFFER_SIZE:
+            bytes_read = bytes_read.strip(" ".encode())
+        
+        if len(bytes_read) == 0:
             break
+        
         
         file.write(bytes_read)
         progress.update(len(bytes_read))
         bytes_left -= len(bytes_read)
 
+console.print("")
 console.print(f"[normal1]Operation completed. Closing the socket connection...[/]")
 client_socket.close()
 server_socket.close()
-print("[normal1]Done.[/]")
+console.print("[normal1]Done.[/]")
