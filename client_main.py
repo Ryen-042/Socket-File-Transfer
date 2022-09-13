@@ -48,7 +48,7 @@ with zipfile.ZipFile(zip_filename + ".zip", "w", compression = zipfile.ZIP_STORE
     for target_path in target_paths:
         # A file
         if os.path.isfile(target_path):
-            relative_filepath = os.path.normpath(file)
+            relative_filepath = os.path.normpath(target_path)
             zf.write(target_path, arcname=os.path.split(target_path)[1])
             continue
         
@@ -76,7 +76,7 @@ filesize = os.path.getsize(zip_file_path)
 
 client_socket.sendall((zip_filename  + ".zip" + "|" + str(filesize)).encode() + f"{'':<{BUFFER_SIZE-len((zip_filename  + '.zip' + '|' + str(filesize)).encode())}}".encode())
 
-console.print(f"[normal1]Filesize: [normal2]{filesize/1024//1024}[/][/]")
+console.print(f"[normal1]Filesize: [normal2]{filesize/1024:.2f} MB[/][/]")
 
 trans_progress = tqdm.tqdm(desc=f"Sending {os.path.split(zip_file_path)[1]}", total=filesize, leave=False, unit="B", unit_scale=True, unit_divisor=1024)
 with open(zip_file_path, "rb") as zf:
@@ -96,3 +96,4 @@ console.print("[normal1]Operation completed. Deleting the created zip file...[/]
 os.remove(zip_file_path)
 console.print("[normal1]Closing the socket connection...[/]")
 client_socket.close()
+console.print("[normal1]Done.[/]")
