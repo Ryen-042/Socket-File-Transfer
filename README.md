@@ -17,6 +17,10 @@ There are apps like shareit that share files. However, they are slow, unreliable
     For `files_or_directories`, provide one or more absolute paths separated by spaces.
 
 ## Bonus Section:
-For entering file paths, you can simply drag-&-drop the file to the terminal and the file path will be automatically copied.
+- For entering file paths, you can simply drag-&-drop the file to the terminal and the file path will be automatically copied. Some terminal programs allow dropping multiple files. One good example is [Cmder](https://cmder.app/).
 
-Some terminal programs allow dropping multiple files. One good example is [Cmder](https://cmder.app/).
+- If no connection could be made between two devices, this may be caused by the firewall. For windows users, you could solve it by:
+  - Open start menu and search for: `Windows Defender Firewall with Advanced Security`.
+  - In the overview section, click on the `Windows Defender Firewall Properties`.
+  - Open the tap corresponding to the network type your are using (`Private` or `Public`).
+  - From the state section, set the `Inbound connenctions` to `Allow`.
